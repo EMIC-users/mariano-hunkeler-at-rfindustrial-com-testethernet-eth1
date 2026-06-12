@@ -19,6 +19,8 @@
       <itemPath>spi1.c</itemPath>
       <itemPath>enc28j60.c</itemPath>
       <itemPath>ModbusTCP_Modbus.c</itemPath>
+      <itemPath>Flash.c</itemPath>
+      <itemPath>Persist.c</itemPath>
       <itemPath>main.c</itemPath>
       <itemPath>userFncFile.c</itemPath>
     </logicalFolder>

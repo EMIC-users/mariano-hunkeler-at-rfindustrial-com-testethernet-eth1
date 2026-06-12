@@ -17,6 +17,10 @@
 static const uint8_t my_mac[6] = { 0x00, 0x04, 0xA3, 0x11, 0x22, 0x33 };
 static const uint8_t my_ip[4]  = { 192, 168, 0, 30 };
 
+char persist_ ModbusTCP_Modbus_ip[16]  = "192.168.0.30";
+char persist_ ModbusTCP_Modbus_mac[18] = "00:04:A3:11:22:33";
+uint16_t persist_ ModbusTCP_Modbus_port = 502;
+
 static uint8_t  rxbuf[600];
 
 /*==================[internal functions]=====================================*/

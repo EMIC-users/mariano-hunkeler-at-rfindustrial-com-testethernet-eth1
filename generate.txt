@@ -49,6 +49,8 @@
 
 // --- Configuración de red (variables de la API, patrón @var estándar) ---
 // El integrador les asigna valor desde el editor como a cualquier variable.
+// Persistencia: las vars llevan persist_ (sección .persist) y el módulo incluye
+// _api/System/Persist — saveVars/loadVars las guarda/restaura en flash interna.
 // v1: el firmware todavía usa ip0..ip3/MAC fija del setInput; el consumo de estas
 // variables (parse en el init/poll) es la próxima pasada del lado firmware.
 
@@ -71,6 +73,15 @@
 
 
 // Modbus binding maps:
+
+
+
+
+
+// Persistencia en flash interna de las variables persist_ (config de red de
+// Modbus: ip/mac/port). Expone saveVars/loadVars al integrador.
+
+
 
 
 

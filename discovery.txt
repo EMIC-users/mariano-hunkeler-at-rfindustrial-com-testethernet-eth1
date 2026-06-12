@@ -3,6 +3,12 @@
 
 //------------------- Process EMIC-Generate files result ----------------
 
+// Functions:
+
+
+// Events:
+
+
 //------------------- APIs -----------------------
 
 // LED de estado
@@ -30,6 +36,21 @@
 
 // Esclavo Modbus TCP (ENC28J60 por SPI1, IP fija 192.168.0.30, 20 holding regs)
 
+// Config BLOQUEANTE de instancia (Configurator estándar, como el protocolo del USB):
+// el integrador elige el modo UNA vez al instanciar el módulo (irreversible en
+// producción; solo el entorno de desarrollo puede regenerar recursos). En modo map
+// los recursos legacy (setReg/getReg/onRegWritten) NO existen: sus bloques de
+// metadata quedan fuera de la discovery de la instancia y su código fuera del build.
+// El valor elegido llega como macro config.ModbusMode (config.json de la instancia);
+// el branch discovery precomputa los recursos POR OPCIÓN automáticamente.
+
+// Deriva el define que gatean el resto de este archivo y el .c
+// (modbusMode_<instancia>_map | modbusMode_<instancia>_registers).
+
+// --- Configuración de red (variables de la API, patrón @var estándar) ---
+// El integrador les asigna valor desde el editor como a cualquier variable.
+// v1: el firmware todavía usa ip0..ip3/MAC fija del setInput; el consumo de estas
+// variables (parse en el init/poll) es la próxima pasada del lado firmware.
 
 
 
@@ -44,6 +65,12 @@
 
 
 
+
+
+
+
+
+// Modbus binding maps:
 
 
 
