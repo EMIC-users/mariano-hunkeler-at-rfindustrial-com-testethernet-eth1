@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project>
+  <executable name="C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\dist\production\target.production.elf">
+    <memory name="data">
+      <units>bytes</units>
+      <length>8192</length>
+      <used>688</used>
+      <free>7504</free>
+    </memory>
+    <memory name="program">
+      <units>bytes</units>
+      <length>65274</length>
+      <used>7266</used>
+      <free>58008</free>
+    </memory>
+  </executable>
+</project>

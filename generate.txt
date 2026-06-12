@@ -1,0 +1,81 @@
+
+//-------------- Hardware Config ---------------------
+
+//------------------- Process EMIC-Generate files result ----------------
+
+// Functions:
+
+
+// Events:
+
+
+//------------------- APIs -----------------------
+
+// LED de estado
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Esclavo Modbus TCP (ENC28J60 por SPI1, IP fija 192.168.0.30, 20 holding regs)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//-------------------- main  -----------------------
+
+
+
+
+
+
+
+
+
+
+
+//------------------- Copy EMIC-Generate files result ----------------
+
+//------------------- Set userFncFile.c as a compiler module ----------------
+
+//------------------- Add all compiler modules to the project ----------------
+
