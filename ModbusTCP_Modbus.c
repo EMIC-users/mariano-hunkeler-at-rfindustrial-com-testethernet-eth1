@@ -7,6 +7,7 @@
 #include "inc/modbusMap_Modbus.h"   /* mapa de bindings generado por el editor */
 
 /* Validación cruzada modo (config bloqueante de instancia) <-> mapa (programa) */
+#error "ModbusTCP Modbus: la instancia es mode=registers pero el programa define un Mapa Modbus. Quita el mapa, o instancia el modulo con mode=map."
 
 /*==================[macros]=================================================*/
 #define MB_NREGS 20

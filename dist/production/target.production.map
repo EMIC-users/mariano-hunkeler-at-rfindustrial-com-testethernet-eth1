@@ -25,6 +25,11 @@ Command:
   C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\timer.o \
   C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\systemTimer.o \
   C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\led_Led1.o \
+  C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\spi1.o \
+  C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\enc28j60.o \
+  C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\ModbusTCP_Modbus.o \
+  C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\main.o \
+  C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\userFncFile.o \
   --defsym=__MPLAB_BUILD=1 \
   --defsym=__MPLAB_DEBUG=0 \
   -Tp24FJ64GA002.gld.00 \
@@ -57,6 +62,18 @@ c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(data_
                               c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(crt0_standard.o) (__data_init_standard)
 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(crt_start_mode_normal.Meo)
                               (__crt_start_mode_normal)
+c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(delay32.Meo)
+                              C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\enc28j60.o (___delay32)
+c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(divsi3.XX_o)
+                              C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\spi1.o (___divsi3)
+c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(udivsi3.XX_o)
+                              c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(divsi3.XX_o) (___udivsi3)
+c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(memcmp.XX_o)
+                              C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\ModbusTCP_Modbus.o (_memcmp)
+c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(memcpy.XX_o)
+                              C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\ModbusTCP_Modbus.o (_memcpy)
+c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(memmove.XX_o)
+                              C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\ModbusTCP_Modbus.o (_memmove)
 
 
 xc16-ld 2.10 (A)
@@ -69,20 +86,27 @@ Default Scalar Model: Small
 
 section                    address   length (PC units)   length (bytes) (dec)
 -------                    -------   -----------------   --------------------
-.text                        0x200                0xfa           0x177  (375)
-.text                        0x2fa                0x74            0xae  (174)
-.dinit                       0x36e                 0xe            0x15  (21)
+.text                        0x200               0x24e           0x375  (885)
+.const                       0x44e                0x3c            0x5a  (90)
+.text                        0x48a              0x11fe          0x1afd  (6909)
+.dinit                      0x1688                0x34            0x4e  (78)
+.text                       0x16bc                0x44            0x66  (102)
+.init.delay32               0x1700                0x1c            0x2a  (42)
+.text                       0x171c                0x30            0x48  (72)
 
-                 Total "program" memory used (bytes):          0x23a  (570) <1%
+                 Total "program" memory used (bytes):         0x1ff2  (8178) 12%
 
 
 "data" Memory  [Origin = 0x800, Length = 0x2000]
 
 section                    address      alignment gaps    total length  (dec)
 -------                    -------      --------------    -------------------
-.nbss                        0x800                   0             0x6  (6)
+.nbss                        0x800                   0            0x16  (22)
+.ndata                       0x816                   0             0x2  (2)
+.nbss                        0x818                   0             0x2  (2)
+.bss                         0x81a                   0           0x278  (632)
 
-                 Total "data" memory used (bytes):            0x6  (6) <1%
+                 Total "data" memory used (bytes):          0x292  (658) 8%
 
 
 Dynamic Memory Usage
@@ -90,12 +114,36 @@ Dynamic Memory Usage
 region                     address                      maximum length  (dec)
 ------                     -------                      ---------------------
 heap                             0                                   0  (0)
-stack                        0x806                              0x1ffa  (8186)
+stack                        0xa92                              0x1d6e  (7534)
 
-                 Maximum dynamic memory (bytes):         0x1ffa  (8186)
+                 Maximum dynamic memory (bytes):         0x1d6e  (7534)
 
 Info: Project is using a large data memory model when small data memory model is sufficient.
 
+
+External Symbols in Data Memory (by address):
+
+                    0x0800                  _Temp
+                    0x0804                  _miVar
+                    0x0806                  _counr
+                    0x080a                  _spi1_pending_data
+                    0x080c                  _spi1_indice
+                    0x080e                  _spi1_fun_ptr
+                    0x0816                  _spi1_package_size
+                    0x0817                  _spi1_ready
+                    0x0a72                  _spi1_response_data
+
+External Symbols in Data Memory (by name):
+
+                    0x0800                  _Temp
+                    0x0806                  _counr
+                    0x0804                  _miVar
+                    0x080e                  _spi1_fun_ptr
+                    0x080c                  _spi1_indice
+                    0x0816                  _spi1_package_size
+                    0x080a                  _spi1_pending_data
+                    0x0817                  _spi1_ready
+                    0x0a72                  _spi1_response_data
 
 External Symbols in Program Memory (by address):
 
@@ -103,29 +151,81 @@ External Symbols in Program Memory (by address):
                   0x00023c                  __psv_init
                   0x000252                  __data_init
                   0x000252                  __data_init_standard
-                  0x0002cc                  __T4Interrupt
-                  0x0002f4                  __DefaultInterrupt
-                  0x0002fa                  _LEDs_Led1_init
-                  0x000302                  _LEDs_Led1_state
-                  0x000332                  _getSystemMilis
-                  0x00033c                  _callback
-                  0x00034e                  _systemTimeInit
-                  0x000358                  _timer4_init
+                  0x0002d0                  __T4Interrupt
+                  0x0002f8                  __SPI1Interrupt
+                  0x000360                  __DefaultInterrupt
+                  0x000366                  ___divsi3
+                  0x000384                  ___udivsi3
+                  0x0003a4                  _memcmp
+                  0x0003c0                  _memcpy
+                  0x0003ce                  _memmove
+                  0x000f54                  _ModbusTCP_Modbus_init
+                  0x000f5e                  _ModbusTCP_Modbus_poll
+                  0x0010d2                  _enc28j60_init
+                  0x0011dc                  _enc28j60_revid
+                  0x0011ea                  _enc28j60_link_up
+                  0x0011f8                  _enc28j60_send
+                  0x0012ce                  _enc28j60_recv
+                  0x0013b6                  _SPI1_init
+                  0x0014b8                  _SPI1_enable
+                  0x0014c0                  _SPI1_disable
+                  0x0014c8                  _xchangeSPI1b_8
+                  0x0014e6                  _xchangeSPI1b_16
+                  0x001502                  _SPI1_clr
+                  0x001516                  _SPI1_send_async
+                  0x001554                  _SPI1_SetSpeed
+                  0x001650                  _LEDs_Led1_init
+                  0x001658                  _LEDs_Led1_state
+                  0x0016bc                  _getSystemMilis
+                  0x0016c6                  _callback
+                  0x0016d8                  _systemTimeInit
+                  0x0016e2                  _initSystem
+                  0x0016f0                  _main
+                  0x001700                  ___delay32
+                  0x00171c                  _onReset
+                  0x001726                  _ModbusTCP_Modbus_onMotorStart1
+                  0x001736                  _timer4_init
 
 External Symbols in Program Memory (by name):
 
-                  0x0002fa                  _LEDs_Led1_init
-                  0x000302                  _LEDs_Led1_state
-                  0x0002f4                  __DefaultInterrupt
-                  0x0002cc                  __T4Interrupt
+                  0x001650                  _LEDs_Led1_init
+                  0x001658                  _LEDs_Led1_state
+                  0x000f54                  _ModbusTCP_Modbus_init
+                  0x001726                  _ModbusTCP_Modbus_onMotorStart1
+                  0x000f5e                  _ModbusTCP_Modbus_poll
+                  0x001554                  _SPI1_SetSpeed
+                  0x001502                  _SPI1_clr
+                  0x0014c0                  _SPI1_disable
+                  0x0014b8                  _SPI1_enable
+                  0x0013b6                  _SPI1_init
+                  0x001516                  _SPI1_send_async
+                  0x000360                  __DefaultInterrupt
+                  0x0002f8                  __SPI1Interrupt
+                  0x0002d0                  __T4Interrupt
+                  0x001700                  ___delay32
+                  0x000366                  ___divsi3
+                  0x000384                  ___udivsi3
                   0x000252                  __data_init
                   0x000252                  __data_init_standard
                   0x00023c                  __psv_init
                   0x000200                  __resetPRI
-                  0x00033c                  _callback
-                  0x000332                  _getSystemMilis
-                  0x00034e                  _systemTimeInit
-                  0x000358                  _timer4_init
+                  0x0016c6                  _callback
+                  0x0010d2                  _enc28j60_init
+                  0x0011ea                  _enc28j60_link_up
+                  0x0012ce                  _enc28j60_recv
+                  0x0011dc                  _enc28j60_revid
+                  0x0011f8                  _enc28j60_send
+                  0x0016bc                  _getSystemMilis
+                  0x0016e2                  _initSystem
+                  0x0016f0                  _main
+                  0x0003a4                  _memcmp
+                  0x0003c0                  _memcpy
+                  0x0003ce                  _memmove
+                  0x00171c                  _onReset
+                  0x0016d8                  _systemTimeInit
+                  0x001736                  _timer4_init
+                  0x0014e6                  _xchangeSPI1b_16
+                  0x0014c8                  _xchangeSPI1b_8
 
 Memory Configuration
 
@@ -145,6 +245,11 @@ Linker script and memory map
 LOAD C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\timer.o
 LOAD C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\systemTimer.o
 LOAD C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\led_Led1.o
+LOAD C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\spi1.o
+LOAD C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\enc28j60.o
+LOAD C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\ModbusTCP_Modbus.o
+LOAD C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\main.o
+LOAD C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\userFncFile.o
                     0x0001                  __MPLAB_BUILD = 0x1
                     0x0000                  __MPLAB_DEBUG = 0x0
 LOAD c:/program files/microchip/xc16/v2.10/bin/bin/../../lib/PIC24F\libpPIC24Fxxx-elf.a
@@ -165,7 +270,7 @@ LOAD c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libfx-elf.a
                   0x000002          0x2 SHORT 0x0 ((ABSOLUTE (__reset) >> 0x10) & 0x7f)
                   0x000003          0x2 SHORT 0x0
 
-.text             0x000200         0xfa
+.text             0x000200        0x24e
  *(.init)
  .init            0x000200         0x4c c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(crt0_standard.o)
                   0x000200                  __resetPRI
@@ -177,18 +282,30 @@ LOAD c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libfx-elf.a
  *(.user_init)
  *(.handle)
  *(.isr*)
- .isr.text        0x0002cc         0x28 C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\timer.o
-                  0x0002cc                  __T4Interrupt
- .isr             0x0002f4          0x4 default_isr
-                  0x0002f4                  __DefaultInterrupt
+ .isr.text        0x0002d0         0x28 C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\timer.o
+                  0x0002d0                  __T4Interrupt
+ .isr.text        0x0002f8         0x68 C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\spi1.o
+                  0x0002f8                  __SPI1Interrupt
+ .isr             0x000360          0x4 default_isr
+                  0x000360                  __DefaultInterrupt
  *(.libc)
  *(.libm)
  *(.libdsp)
  *(.lib*)
  .libpic30_crt_start_mode
-                  0x0002f8          0x2 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(crt_start_mode_normal.Meo)
-                  0x0002f8                  __crt_start_mode
-                  0x0002f8                  __crt_start_mode_normal
+                  0x000364          0x2 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(crt_start_mode_normal.Meo)
+                  0x000364                  __crt_start_mode
+                  0x000364                  __crt_start_mode_normal
+ .libm.divsi3     0x000366         0x1e c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(divsi3.XX_o)
+                  0x000366                  ___divsi3
+ .libm.udivsi3    0x000384         0x20 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(udivsi3.XX_o)
+                  0x000384                  ___udivsi3
+ .libc.memcmp     0x0003a4         0x1c c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(memcmp.XX_o)
+                  0x0003a4                  _memcmp
+ .libc.memcpy     0x0003c0          0xe c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(memcpy.XX_o)
+                  0x0003c0                  _memcpy
+ .libc.memmove    0x0003ce         0x80 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(memmove.XX_o)
+                  0x0003ce                  _memmove
 
 usercode
  *(usercode)
@@ -202,15 +319,21 @@ __CONFIG1
 .comment
  *(.comment)
 
-.debug_info
+.debug_info       0x000000        0x119
  *(.debug_info)
+ .debug_info      0x000000         0x8c c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(divsi3.XX_o)
+ .debug_info      0x00008c         0x8d c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(udivsi3.XX_o)
  *(.gnu.linkonce.wi.*)
 
-.debug_abbrev
+.debug_abbrev     0x000000         0x28
  *(.debug_abbrev)
+ .debug_abbrev    0x000000         0x14 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(divsi3.XX_o)
+ .debug_abbrev    0x000014         0x14 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(udivsi3.XX_o)
 
-.debug_line
+.debug_line       0x000000         0x88
  *(.debug_line)
+ .debug_line      0x000000         0x43 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(divsi3.XX_o)
+ .debug_line      0x000043         0x45 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(udivsi3.XX_o)
 
 .debug_frame
  *(.debug_frame)
@@ -230,8 +353,12 @@ __CONFIG1
 .debug_ranges
  *(.debug_ranges)
 
-.debug_aranges
+.debug_aranges    0x000000         0x40
  *(.debug_aranges)
+ .debug_aranges
+                  0x000000         0x20 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(divsi3.XX_o)
+ .debug_aranges
+                  0x000020         0x20 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(udivsi3.XX_o)
                     0x0000                  WREG0 = 0x0
                     0x0000                  _WREG0 = 0x0
                     0x0002                  WREG1 = 0x2
@@ -822,37 +949,127 @@ LOAD default_isr
 LOAD data_init
 
 __c30_signature
-                  0x000000         0x1e
+                  0x000040         0x60
  __c30_signature
-                  0x000000          0x6 C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\timer.o
+                  0x000040          0x6 C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\timer.o
  __c30_signature
-                  0x000006          0x6 C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\systemTimer.o
+                  0x000046          0x6 C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\systemTimer.o
  __c30_signature
-                  0x00000c          0x6 C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\led_Led1.o
+                  0x00004c          0x6 C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\led_Led1.o
  __c30_signature
-                  0x000012          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(crt0_standard.o)
+                  0x000052          0x6 C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\spi1.o
  __c30_signature
-                  0x000018          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(data_init_standard.o)
+                  0x000058          0x6 C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\enc28j60.o
+ __c30_signature
+                  0x00005e          0x6 C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\ModbusTCP_Modbus.o
+ __c30_signature
+                  0x000064          0x6 C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\main.o
+ __c30_signature
+                  0x00006a          0x6 C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\userFncFile.o
+ __c30_signature
+                  0x000070          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(crt0_standard.o)
+ __c30_signature
+                  0x000076          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(data_init_standard.o)
+ __c30_signature
+                  0x00007c          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(delay32.Meo)
+ __c30_signature
+                  0x000082          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(divsi3.XX_o)
+ __c30_signature
+                  0x000088          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(udivsi3.XX_o)
+ __c30_signature
+                  0x00008e          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(memcmp.XX_o)
+ __c30_signature
+                  0x000094          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(memcpy.XX_o)
+ __c30_signature
+                  0x00009a          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a(memmove.XX_o)
 
-.nbss               0x0800          0x6
- .nbss              0x0800          0x4 C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\systemTimer.o
- .nbss              0x0804          0x2 C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\timer.o
+.nbss               0x0800         0x16
+ .nbss              0x0800          0xa C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\userFncFile.o
+                    0x0800                  _Temp
+                    0x0804                  _miVar
+                    0x0806                  _counr
+ .nbss              0x080a          0x6 C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\spi1.o
+                    0x080a                  _spi1_pending_data
+                    0x080c                  _spi1_indice
+                    0x080e                  _spi1_fun_ptr
+ .nbss              0x0810          0x4 C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\systemTimer.o
+ .nbss              0x0814          0x2 C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\timer.o
+
+.ndata              0x0816          0x2
+ .ndata             0x0816          0x2 C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\spi1.o
+                    0x0816                  _spi1_package_size
+                    0x0817                  _spi1_ready
+
+.nbss               0x0818          0x2
+ .nbss              0x0818          0x2 C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\enc28j60.o
+
+.bss                0x081a        0x278
+ .bss               0x081a        0x258 C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\ModbusTCP_Modbus.o
+ .bss               0x0a72         0x20 C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\spi1.o
+                    0x0a72                  _spi1_response_data
 
 .ivt._T4Interrupt
                   0x00004a          0x2
  .ivt._T4Interrupt
                   0x00004a          0x2 C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\timer.o
 
-.text             0x0002fa         0x74
- .text            0x0002fa         0x38 C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\led_Led1.o
-                  0x0002fa                  _LEDs_Led1_init
-                  0x000302                  _LEDs_Led1_state
- .text            0x000332         0x26 C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\systemTimer.o
-                  0x000332                  _getSystemMilis
-                  0x00033c                  _callback
-                  0x00034e                  _systemTimeInit
- .text            0x000358         0x16 C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\timer.o
-                  0x000358                  _timer4_init
+.ivt._SPI1Interrupt
+                  0x000028          0x2
+ .ivt._SPI1Interrupt
+                  0x000028          0x2 C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\spi1.o
 
-.dinit            0x00036e          0xe
- .dinit           0x00036e          0xe data_init
+.config_JTAGEN    0x00abfe          0x2
+ .config_JTAGEN
+                  0x00abfe          0x2 C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\main.o
+
+.config_IESO      0x00abfc          0x2
+ .config_IESO     0x00abfc          0x2 C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\main.o
+
+.const              0x844e         0x3c load address 0x00044e  
+ .const             0x844e         0x3c C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\ModbusTCP_Modbus.o
+
+.text             0x00048a       0x11fe
+ .text            0x00048a        0xb20 C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\ModbusTCP_Modbus.o
+                  0x000f54                  _ModbusTCP_Modbus_init
+                  0x000f5e                  _ModbusTCP_Modbus_poll
+ .text            0x000faa        0x40c C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\enc28j60.o
+                  0x0010d2                  _enc28j60_init
+                  0x0011dc                  _enc28j60_revid
+                  0x0011ea                  _enc28j60_link_up
+                  0x0011f8                  _enc28j60_send
+                  0x0012ce                  _enc28j60_recv
+ .text            0x0013b6        0x29a C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\spi1.o
+                  0x0013b6                  _SPI1_init
+                  0x0014b8                  _SPI1_enable
+                  0x0014c0                  _SPI1_disable
+                  0x0014c8                  _xchangeSPI1b_8
+                  0x0014e6                  _xchangeSPI1b_16
+                  0x001502                  _SPI1_clr
+                  0x001516                  _SPI1_send_async
+                  0x001554                  _SPI1_SetSpeed
+ .text            0x001650         0x38 C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\led_Led1.o
+                  0x001650                  _LEDs_Led1_init
+                  0x001658                  _LEDs_Led1_state
+
+.dinit            0x001688         0x34
+ .dinit           0x001688         0x34 data_init
+
+.text             0x0016bc         0x44
+ .text            0x0016bc         0x26 C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\systemTimer.o
+                  0x0016bc                  _getSystemMilis
+                  0x0016c6                  _callback
+                  0x0016d8                  _systemTimeInit
+ .text            0x0016e2         0x1e C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\main.o
+                  0x0016e2                  _initSystem
+                  0x0016f0                  _main
+
+.init.delay32     0x001700         0x1c
+ .init.delay32    0x001700         0x1c c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(delay32.Meo)
+                  0x001700                  ___delay32
+
+.text             0x00171c         0x30
+ .text            0x00171c         0x1a C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\userFncFile.o
+                  0x00171c                  _onReset
+                  0x001726                  _ModbusTCP_Modbus_onMotorStart1
+ .text            0x001736         0x16 C:/Dropbox/EMIC/TARGETS/mariano.hunkeler__rfindustrial.com/TestEthernet/Eth1\build\default\production\timer.o
+                  0x001736                  _timer4_init
