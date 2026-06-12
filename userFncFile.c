@@ -26,7 +26,7 @@ void ModbusTCP_Modbus_onRegWritten(uint8_t addr, uint16_t value)
 }
 
 
-/* Modbus map 'Modbus' (api ModbusTCP): 3 bindings -> SYS:/modbusMap.emic */
+/* Modbus map 'Modbus' (api ModbusTCP): 1 bindings -> SYS:/modbusMap.emic */
 
 
 
