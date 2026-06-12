@@ -28,10 +28,12 @@ typedef struct {
 /* Variables de la Data tab referenciadas por el mapa (definidas en userFncFile.c) */
 
 /* Eventos de comando (los implementa el integrador; firma del contrato) */
+extern void ModbusTCP_Modbus_onMotorStart1(uint16_t value);
 
 #define MB_MAP_SIZE 20
 
 static const mbBinding_t mbBindings_Modbus[] = {
+    { 0, 1, MB_CMD, MB_ABCD, MB_RW, (void*)0, (void (*)(uint16_t))ModbusTCP_Modbus_onMotorStart1 },
 };
 #define MB_NBINDINGS (sizeof mbBindings_Modbus / sizeof mbBindings_Modbus[0])
 
