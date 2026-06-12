@@ -14,8 +14,9 @@
 #define TCP_ISN  0x1A2B3C4DUL
 
 /*==================[internal data]==========================================*/
-static const uint8_t my_mac[6] = { 0x00, 0x04, 0xA3, 0x11, 0x22, 0x33 };
-static const uint8_t my_ip[4]  = { 192, 168, 0, 30 };
+static uint8_t  my_mac[6]  = { 0x00, 0x04, 0xA3, 0x11, 0x22, 0x33 };
+static uint8_t  my_ip[4]   = { 192, 168, 0, 30 };
+static uint16_t my_port    = MB_PORT;
 
 char persist_ ModbusTCP_Modbus_ip[16]  = "192.168.0.30";
 char persist_ ModbusTCP_Modbus_mac[18] = "00:04:A3:11:22:33";
@@ -24,6 +25,59 @@ uint16_t persist_ ModbusTCP_Modbus_port = 502;
 static uint8_t  rxbuf[600];
 
 /*==================[internal functions]=====================================*/
+// Parse de "a.b.c.d" decimal a 4 octetos. Devuelve 1 si el texto es valido.
+static uint8_t parse_ip(const char *s, uint8_t out[4])
+{
+    uint16_t v;
+    uint8_t i, d;
+
+    for (i = 0; i < 4; i++) {
+        v = 0;
+        d = 0;
+        while (*s >= '0' && *s <= '9' && d < 4) {
+            v = v * 10 + (uint16_t)(*s++ - '0');
+            d++;
+        }
+        if (d == 0 || d > 3 || v > 255)
+            return 0;
+        out[i] = (uint8_t)v;
+        if (i < 3 && *s++ != '.')
+            return 0;
+    }
+    return *s == 0;
+}
+
+static int8_t hex_nib(char c)
+{
+    if (c >= '0' && c <= '9') return c - '0';
+    if (c >= 'A' && c <= 'F') return c - 'A' + 10;
+    if (c >= 'a' && c <= 'f') return c - 'a' + 10;
+    return -1;
+}
+
+// Parse de "XX:XX:XX:XX:XX:XX" (sep ':' o '-') a 6 bytes. 1 = valido.
+static uint8_t parse_mac(const char *s, uint8_t out[6])
+{
+    uint8_t i;
+    int8_t h, l;
+
+    for (i = 0; i < 6; i++) {
+        h = hex_nib(*s++);
+        if (h < 0)
+            return 0;
+        l = hex_nib(*s++);
+        if (l < 0)
+            return 0;
+        out[i] = ((uint8_t)h << 4) | (uint8_t)l;
+        if (i < 5) {
+            if (*s != ':' && *s != '-')
+                return 0;
+            s++;
+        }
+    }
+    return *s == 0;
+}
+
 // suma de a 16 bits big-endian, sin complementar (para encadenar)
 static uint32_t sum16(const uint8_t *p, uint16_t n, uint32_t s)
 {
@@ -297,7 +351,7 @@ static uint16_t tcp_handle(uint8_t *f, uint16_t n)
     ip_len = ((uint16_t)f[16] << 8) | f[17];
     if (ip_len < 40 || 14 + ip_len > n)
         return 0;
-    if ((((uint16_t)f[36] << 8) | f[37]) != MB_PORT)
+    if ((((uint16_t)f[36] << 8) | f[37]) != my_port)
         return 0;
 
     hl    = (uint16_t)(f[46] >> 4) * 4;
@@ -354,7 +408,7 @@ static uint16_t tcp_handle(uint8_t *f, uint16_t n)
 
     // TCP: puertos invertidos, seq/ack, header 20, sin opciones
     f[36] = f[34]; f[37] = f[35];       // dst = puerto origen del request
-    f[34] = MB_PORT >> 8; f[35] = MB_PORT & 0xFF;
+    f[34] = my_port >> 8; f[35] = my_port & 0xFF;
     f[38] = sq2 >> 24; f[39] = sq2 >> 16; f[40] = sq2 >> 8; f[41] = sq2;
     f[42] = ak2 >> 24; f[43] = ak2 >> 16; f[44] = ak2 >> 8; f[45] = ak2;
     f[46] = 0x50;
@@ -377,6 +431,14 @@ static uint16_t tcp_handle(uint8_t *f, uint16_t n)
 /*==================[external functions]=====================================*/
 void ModbusTCP_Modbus_init(void)
 {
+    uint8_t tmp[6];
+
+    if (parse_ip(ModbusTCP_Modbus_ip, tmp))
+        memcpy(my_ip, tmp, 4);
+    if (parse_mac(ModbusTCP_Modbus_mac, tmp))
+        memcpy(my_mac, tmp, 6);
+    if (ModbusTCP_Modbus_port != 0)
+        my_port = ModbusTCP_Modbus_port;
 
     enc28j60_init(my_mac);
 }

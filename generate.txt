@@ -51,8 +51,10 @@
 // El integrador les asigna valor desde el editor como a cualquier variable.
 // Persistencia: las vars llevan persist_ (sección .persist) y el módulo incluye
 // _api/System/Persist — saveVars/loadVars las guarda/restaura en flash interna.
-// v1: el firmware todavía usa ip0..ip3/MAC fija del setInput; el consumo de estas
-// variables (parse en el init/poll) es la próxima pasada del lado firmware.
+// Consumo: el init de la API parsea ip/mac (texto) y port a la identidad viva
+// del stack; texto inválido => quedan los defaults de fábrica. Para aplicar la
+// config guardada llamá loadVars en SystemConfig (corre antes de los inits);
+// un cambio posterior requiere reset.
 
 
 
