@@ -4,6 +4,7 @@
 #include <string.h>
 #include "inc/ModbusTCP_Modbus.h"
 #include "inc/enc28j60.h"
+#include "inc/modbusMap_Modbus.h"   /* mapa de bindings generado por el editor */
 
 /*==================[macros]=================================================*/
 #define MB_NREGS 20
@@ -15,7 +16,6 @@ static const uint8_t my_mac[6] = { 0x00, 0x04, 0xA3, 0x11, 0x22, 0x33 };
 static const uint8_t my_ip[4]  = { 192, 168, 0, 30 };
 
 static uint8_t  rxbuf[600];
-static uint16_t holding[MB_NREGS];
 
 /*==================[internal functions]=====================================*/
 // suma de a 16 bits big-endian, sin complementar (para encadenar)
@@ -100,11 +100,114 @@ static void icmp_reply(uint8_t *f)
     enc28j60_send(f, 14 + ip_len);
 }
 
+/*==================[mapa de bindings]=======================================*/
+// Modo MAPA: cada registro Modbus se sirve desde las variables vivas del
+// integrador via la tabla const mbBindings (generada por el editor). No hay
+// copia ni espejo: serializa/deserializa directo. Reglas del contrato:
+// - Lectura de registro no bindeado -> 0; CMD lee 0 (v1, no almacena).
+// - Escritura sobre no bindeado o binding R -> excepcion 0x02.
+// - Escritura PARCIAL de un binding multi-registro -> excepcion 0x03 sin
+//   escribir nada (validacion en pasada previa).
+// - Eventos POST-transaccion: primero se escriben TODAS las variables,
+//   despues se disparan los eventos (una vez por binding tocado), con el
+//   primer word escrito del binding como parametro.
+
+// Binding que CONTIENE al registro reg (lineal: el mapa es chico y const)
+static const mbBinding_t *mb_find(uint16_t reg)
+{
+    uint16_t i;
+    for (i = 0; i < MB_NBINDINGS; i++) {
+        if (reg >= mbBindings_Modbus[i].addr &&
+            reg <  mbBindings_Modbus[i].addr + mbBindings_Modbus[i].nRegs)
+            return &mbBindings_Modbus[i];
+    }
+    return 0;
+}
+
+// Word de 16 bits que expone el registro reg (serializacion por tipo + word order)
+static uint16_t mb_read_word(uint16_t reg)
+{
+    const mbBinding_t *b = mb_find(reg);
+    uint32_t v32;
+
+    if (!b)
+        return 0;                               // no bindeado -> 0
+    switch (b->type) {
+    case MB_INT16:
+    case MB_UINT16:
+        return *(const uint16_t *)b->ptr;       // patron de bits (two's complement ok)
+    case MB_CMD:
+        return 0;                               // v1: comando puro lee 0
+    default:                                    // 32 bits (int32/uint32/float)
+        memcpy(&v32, b->ptr, 4);
+        if ((reg - b->addr) == 0)
+            return (b->wordOrder == MB_ABCD) ? (uint16_t)(v32 >> 16) : (uint16_t)v32;
+        else
+            return (b->wordOrder == MB_ABCD) ? (uint16_t)v32 : (uint16_t)(v32 >> 16);
+    }
+}
+
+// Pasada 1: valida la escritura [addr, addr+cnt). 0 = OK, sino codigo de excepcion.
+static uint8_t mb_write_check(uint16_t addr, uint16_t cnt)
+{
+    uint16_t r;
+    const mbBinding_t *b;
+
+    for (r = addr; r < addr + cnt; r++) {
+        b = mb_find(r);
+        if (!b || b->access != MB_RW)
+            return 0x02;                        // no bindeado o solo lectura
+        if (b->nRegs == 2 &&
+            (b->addr < addr || b->addr + 2 > addr + cnt))
+            return 0x03;                        // multi-registro cubierto a medias
+    }
+    return 0;
+}
+
+// Pasada 2: escribe los valores (d = words big-endian del PDU, ya validado)
+static void mb_write_apply(uint16_t addr, uint16_t cnt, const uint8_t *d)
+{
+    uint16_t r = addr, w0, w1;
+    uint32_t v32;
+    const mbBinding_t *b;
+
+    while (r < addr + cnt) {
+        b  = mb_find(r);
+        w0 = ((uint16_t)d[2 * (r - addr)] << 8) | d[2 * (r - addr) + 1];
+        if (b->type == MB_INT16 || b->type == MB_UINT16) {
+            *(uint16_t *)b->ptr = w0;
+            r++;
+        } else if (b->type == MB_CMD) {
+            r++;                                // no almacena (solo evento)
+        } else {                                // 32 bits: arranca en b->addr (validado)
+            w1  = ((uint16_t)d[2 * (r - addr) + 2] << 8) | d[2 * (r - addr) + 3];
+            v32 = (b->wordOrder == MB_ABCD) ? (((uint32_t)w0 << 16) | w1)
+                                            : (((uint32_t)w1 << 16) | w0);
+            memcpy(b->ptr, &v32, 4);
+            r += 2;
+        }
+    }
+}
+
+// Pasada 3: eventos post-transaccion, una vez por binding tocado, en orden
+static void mb_write_events(uint16_t addr, uint16_t cnt, const uint8_t *d)
+{
+    uint16_t r = addr;
+    const mbBinding_t *b;
+
+    while (r < addr + cnt) {
+        b = mb_find(r);
+        if (b->event)
+            b->event(((uint16_t)d[2 * (r - addr)] << 8) | d[2 * (r - addr) + 1]);
+        r += b->nRegs;
+    }
+}
+
 // Procesa el PDU Modbus in-place; devuelve longitud del PDU de respuesta
 static uint16_t mb_pdu(uint8_t *p, uint16_t len)
 {
-    uint8_t fc = p[0];
-    uint16_t addr, cnt, k;
+    uint8_t fc = p[0], exc;
+    uint16_t addr, cnt, k, w;
 
     if (len < 5) {
         p[0] = fc | 0x80;
@@ -116,39 +219,50 @@ static uint16_t mb_pdu(uint8_t *p, uint16_t len)
 
     switch (fc) {
     case 0x03:                  // read holding registers
-        if (cnt == 0 || cnt > MB_NREGS || addr + cnt > MB_NREGS) {
+        if (cnt == 0 || cnt > MB_MAP_SIZE || addr + cnt > MB_MAP_SIZE) {
             p[0] = fc | 0x80;
             p[1] = 0x02;        // illegal data address
             return 2;
         }
         p[1] = cnt * 2;
         for (k = 0; k < cnt; k++) {
-            p[2 + 2 * k] = holding[addr + k] >> 8;
-            p[3 + 2 * k] = holding[addr + k] & 0xFF;
+            w = mb_read_word(addr + k);
+            p[2 + 2 * k] = w >> 8;
+            p[3 + 2 * k] = w & 0xFF;
         }
         return 2 + cnt * 2;
 
     case 0x06:                  // write single register (cnt = valor)
-        if (addr >= MB_NREGS) {
+        if (addr >= MB_MAP_SIZE) {
             p[0] = fc | 0x80;
             p[1] = 0x02;
             return 2;
         }
-        holding[addr] = cnt;
-        ModbusTCP_Modbus_onRegWritten(addr, cnt);
+        exc = mb_write_check(addr, 1);
+        if (exc) {
+            p[0] = fc | 0x80;
+            p[1] = exc;
+            return 2;
+        }
+        mb_write_apply(addr, 1, &p[3]);
+        mb_write_events(addr, 1, &p[3]);
         return 5;               // la respuesta es eco del request
 
     case 0x10:                  // write multiple registers
-        if (cnt == 0 || addr + cnt > MB_NREGS ||
+        if (cnt == 0 || addr + cnt > MB_MAP_SIZE ||
             len < 6 || p[5] != cnt * 2 || len < (uint16_t)(6 + p[5])) {
             p[0] = fc | 0x80;
             p[1] = 0x02;
             return 2;
         }
-        for (k = 0; k < cnt; k++) {
-            holding[addr + k] = ((uint16_t)p[6 + 2 * k] << 8) | p[7 + 2 * k];
-            ModbusTCP_Modbus_onRegWritten(addr + k, holding[addr + k]);
+        exc = mb_write_check(addr, cnt);
+        if (exc) {
+            p[0] = fc | 0x80;
+            p[1] = exc;
+            return 2;
         }
+        mb_write_apply(addr, cnt, &p[6]);
+        mb_write_events(addr, cnt, &p[6]);
         return 5;               // respuesta: fc + addr + cnt
 
     default:
@@ -257,10 +371,6 @@ static uint16_t tcp_handle(uint8_t *f, uint16_t n)
 /*==================[external functions]=====================================*/
 void ModbusTCP_Modbus_init(void)
 {
-    uint16_t k;
-
-    for (k = 0; k < MB_NREGS; k++)
-        holding[k] = 0x1000 + k;    // patrón reconocible para validar
 
     enc28j60_init(my_mac);
 }
@@ -284,11 +394,8 @@ void ModbusTCP_Modbus_poll(void)
     }
 }
 
-void ModbusTCP_Modbus_setReg(uint8_t addr, uint16_t value)
-{
-    if (addr < MB_NREGS)
-        holding[addr] = value;
-}
-
+// setReg/getReg operan sobre holding[] — SOLO existen en modo legacy. Con mapa de
+// bindings el integrador lee/escribe sus variables directamente (usar setReg con
+// mapa da error de link a propósito: no tiene semántica sobre los bindings).
 /*==================[end of file]============================================*/
 

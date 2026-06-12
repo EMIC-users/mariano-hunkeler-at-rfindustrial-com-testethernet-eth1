@@ -12,6 +12,7 @@
 /* Function Prototypes */
 void onReset();
 void ModbusTCP_Modbus_onRegWritten(uint8_t addr, uint16_t value);
+void ModbusTCP_Modbus_onMotorStart1(uint16_t value);
 
 #endif /* USERFNCFILE_H */
 
