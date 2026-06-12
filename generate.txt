@@ -41,4 +41,5 @@
 // producción; solo el entorno de desarrollo puede regenerar recursos). En modo map
 // los recursos legacy (setReg/getReg/onRegWritten) NO existen: sus bloques de
 // metadata quedan fuera de la discovery de la instancia y su código fuera del build.
+// El valor elegido llega como macro config.ModbusMode (config.json de la instancia);
 // el branch discovery precomputa los recursos POR OPCIÓN automáticamente.
