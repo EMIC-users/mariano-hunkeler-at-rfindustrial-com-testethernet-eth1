@@ -43,3 +43,60 @@
 // metadata quedan fuera de la discovery de la instancia y su código fuera del build.
 // El valor elegido llega como macro config.ModbusMode (config.json de la instancia);
 // el branch discovery precomputa los recursos POR OPCIÓN automáticamente.
+
+// Deriva el define que gatean el resto de este archivo y el .c
+// (modbusMode_<instancia>_map | modbusMode_<instancia>_registers).
+
+// --- Configuración de red (variables de la API, patrón @var estándar) ---
+// El integrador les asigna valor desde el editor como a cualquier variable.
+// v1: el firmware todavía usa ip0..ip3/MAC fija del setInput; el consumo de estas
+// variables (parse en el init/poll) es la próxima pasada del lado firmware.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Modbus binding maps:
+
+
+
+
+
+
+
+
+
+
+
+//-------------------- main  -----------------------
+
+
+
+
+
+
+
+
+
+
+
+//------------------- Copy EMIC-Generate files result ----------------
+
+//------------------- Set userFncFile.c as a compiler module ----------------
+
+//------------------- Add all compiler modules to the project ----------------
+
