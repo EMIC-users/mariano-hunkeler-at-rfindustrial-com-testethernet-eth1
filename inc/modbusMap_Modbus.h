@@ -26,6 +26,10 @@ typedef struct {
 } mbBinding_t;
 
 /* Variables de la Data tab referenciadas por el mapa (definidas en userFncFile.c) */
+extern int16_t miVar;
+extern float Temp;
+extern int32_t counr;
+extern float Temp;
 
 /* Eventos de comando (los implementa el integrador; firma del contrato) */
 extern void ModbusTCP_Modbus_onMotorStart1(uint16_t value);
@@ -34,6 +38,10 @@ extern void ModbusTCP_Modbus_onMotorStart1(uint16_t value);
 
 static const mbBinding_t mbBindings_Modbus[] = {
     { 0, 1, MB_CMD, MB_ABCD, MB_RW, (void*)0, (void (*)(uint16_t))ModbusTCP_Modbus_onMotorStart1 },
+    { 1, 1, MB_INT16, MB_ABCD, MB_RW, (void*)&miVar, (void (*)(uint16_t))0 },
+    { 2, 2, MB_FLOAT, MB_CDAB, MB_RW, (void*)&Temp, (void (*)(uint16_t))0 },
+    { 4, 2, MB_INT32, MB_ABCD, MB_RW, (void*)&counr, (void (*)(uint16_t))0 },
+    { 6, 2, MB_FLOAT, MB_ABCD, MB_R, (void*)&Temp, (void (*)(uint16_t))0 },
 };
 #define MB_NBINDINGS (sizeof mbBindings_Modbus / sizeof mbBindings_Modbus[0])
 

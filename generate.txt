@@ -36,50 +36,9 @@
 
 // Esclavo Modbus TCP (ENC28J60 por SPI1, IP fija 192.168.0.30, 20 holding regs)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Modbus binding maps:
-
-
-
-
-
-
-
-
-
-
-
-//-------------------- main  -----------------------
-
-
-
-
-
-
-
-
-
-
-
-//------------------- Copy EMIC-Generate files result ----------------
-
-//------------------- Set userFncFile.c as a compiler module ----------------
-
-//------------------- Add all compiler modules to the project ----------------
-
+// Config BLOQUEANTE de instancia (Configurator estándar, como el protocolo del USB):
+// el integrador elige el modo UNA vez al instanciar el módulo (irreversible en
+// producción; solo el entorno de desarrollo puede regenerar recursos). En modo map
+// los recursos legacy (setReg/getReg/onRegWritten) NO existen: sus bloques de
+// metadata quedan fuera de la discovery de la instancia y su código fuera del build.
+// el branch discovery precomputa los recursos POR OPCIÓN automáticamente.

@@ -6,6 +6,8 @@
 #include "inc/enc28j60.h"
 #include "inc/modbusMap_Modbus.h"   /* mapa de bindings generado por el editor */
 
+/* Validación cruzada modo (config bloqueante de instancia) <-> mapa (programa) */
+
 /*==================[macros]=================================================*/
 #define MB_NREGS 20
 #define MB_PORT  502

@@ -19,19 +19,14 @@ void onReset()
 }
 
 
-void ModbusTCP_Modbus_onRegWritten(uint8_t addr, uint16_t value)
-{
-    LEDs_Led1_state(2);
-    ModbusTCP_Modbus_setReg(19, value);
-}
-
-
-/* Modbus map 'Modbus' (api ModbusTCP): 1 bindings -> SYS:/modbusMap.emic */
-
-
 void ModbusTCP_Modbus_onMotorStart1(uint16_t value)
 {
+    miVar = (int16_t)(value);
+    LEDs_Led1_state(2);
 }
+
+
+/* Modbus map 'Modbus' (api ModbusTCP): 5 bindings -> SYS:/modbusMap.emic */
 
 
 
